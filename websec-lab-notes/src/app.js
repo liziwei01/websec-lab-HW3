@@ -161,8 +161,16 @@ app.route('/status')
 
 app.route('/img')
     .get(function(req, res){
+		// PATCH
+		let wl = {"jhu.png": 1};
+		for (let i in wl) {
+			if (req.query.id == i) {
+				res.sendFile(path.join(__dirname, '/images/', req.query.id));
+				return;
+			}
+		}
         res.sendFile(
-            path.join(__dirname, '/images/', req.query.id || 'jhu.png'));
+            path.join(__dirname, '/images/', 'jhu.png'));
     })
 
 
