@@ -29,8 +29,9 @@ class Notes {
     }
 
     edit_note(id, author, raw) {
-        undefsafe(this.note_list, id + '.author', author);
-        undefsafe(this.note_list, id + '.raw_note', raw);
+		// PATCH
+        undefsafe(this.note_list, parseInt(id) + '.author', author);
+        undefsafe(this.note_list, parseInt(id) + '.raw_note', raw);
     }
 
     get_all_notes() {
