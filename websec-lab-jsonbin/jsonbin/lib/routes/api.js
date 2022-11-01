@@ -244,7 +244,19 @@ router.post('/*', (req, res, next) => {
     if (!storePath) { // this means it's a root reset
       user.store = body;
     } else {
-      undefsafe(user.store, storePath, body);
+		// PATCH
+		let storeps = storePath.split(".")
+		let objec = user.store
+		for (idx of storeps) {
+			undefsafe(objec, idx, {});
+			let has = Object.prototype.hasOwnProperty.call(objec, idx)
+			if (!has) {
+				return res.status(403).json("{err:attack}")
+			}
+			objec[idx] = {}
+			objec = objec[idx]
+		}
+		undefsafe(user.store, storePath, body);
     }
 
     user.dirty('storeJson', { method: 'POST', path: storePath });
