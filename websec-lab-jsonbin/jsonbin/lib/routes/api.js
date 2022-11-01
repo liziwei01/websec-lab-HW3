@@ -245,18 +245,14 @@ router.post('/*', (req, res, next) => {
       user.store = body;
     } else {
 		// PATCH
-		let storeps = storePath.split(".")
-		let objec = user.store
-		for (idx of storeps) {
-			undefsafe(objec, idx, {});
-			let has = Object.prototype.hasOwnProperty.call(objec, idx)
-			if (!has) {
-				return res.status(403).json("{err:attack}")
-			}
-			objec[idx] = {}
-			objec = objec[idx]
+		Object.freeze(Object.prototype)
+		try {
+			undefsafe(user.store, storePath, body);
+		} catch(e) {
+			console.error(e);
+			res.status(403).json("{err:attack}")
+			return
 		}
-		undefsafe(user.store, storePath, body);
     }
 
     user.dirty('storeJson', { method: 'POST', path: storePath });
